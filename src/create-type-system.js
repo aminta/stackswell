@@ -158,27 +158,27 @@ function create_dialog(settings) {
                 height: viewLineHeight,
                 enabled: settings.chosen_breakpoints[1] == "1"
             },
-            {
-                x: x + (2 * horz_spacing),
-                y: viewLine,
-                width: checkbox_width,
-                height: viewLineHeight,
-                enabled: settings.chosen_breakpoints[2] == "1"
-            },
-            {
-                x: x,
-                y: viewLine - vert_spacing,
-                width: checkbox_width,
-                height: viewLineHeight,
-                enabled: settings.chosen_breakpoints[3] == "1"
-            },
-            {
-                x: x + horz_spacing,
-                y: viewLine - vert_spacing,
-                width: checkbox_width,
-                height: viewLineHeight,
-                enabled: settings.chosen_breakpoints[4] == "1"
-            },
+            // {
+            //     x: x + (2 * horz_spacing),
+            //     y: viewLine,
+            //     width: checkbox_width,
+            //     height: viewLineHeight,
+            //     enabled: settings.chosen_breakpoints[2] == "1"
+            // },
+            // {
+            //     x: x,
+            //     y: viewLine - vert_spacing,
+            //     width: checkbox_width,
+            //     height: viewLineHeight,
+            //     enabled: settings.chosen_breakpoints[3] == "1"
+            // },
+            // {
+            //     x: x + horz_spacing,
+            //     y: viewLine - vert_spacing,
+            //     width: checkbox_width,
+            //     height: viewLineHeight,
+            //     enabled: settings.chosen_breakpoints[4] == "1"
+            // },
         ],
         textFields: [
             {
@@ -195,27 +195,27 @@ function create_dialog(settings) {
                 height: viewLineHeight,
                 initValue: settings.breakpoint_labels[1]
             },
-            {
-                x: x + (2 * horz_spacing) + textfield_margin_left,
-                y: viewLine,
-                width: textfield_width,
-                height: viewLineHeight,
-                initValue: settings.breakpoint_labels[2]
-            },
-            {
-                x: x + textfield_margin_left,
-                y: viewLine - vert_spacing,
-                width: textfield_width,
-                height: viewLineHeight,
-                initValue: settings.breakpoint_labels[3]
-            },
-            {
-                x: x + horz_spacing + textfield_margin_left,
-                y: viewLine - vert_spacing,
-                width: textfield_width,
-                height: viewLineHeight,
-                initValue: settings.breakpoint_labels[4]
-            }
+            // {
+            //     x: x + (2 * horz_spacing) + textfield_margin_left,
+            //     y: viewLine,
+            //     width: textfield_width,
+            //     height: viewLineHeight,
+            //     initValue: settings.breakpoint_labels[2]
+            // },
+            // {
+            //     x: x + textfield_margin_left,
+            //     y: viewLine - vert_spacing,
+            //     width: textfield_width,
+            //     height: viewLineHeight,
+            //     initValue: settings.breakpoint_labels[3]
+            // },
+            // {
+            //     x: x + horz_spacing + textfield_margin_left,
+            //     y: viewLine - vert_spacing,
+            //     width: textfield_width,
+            //     height: viewLineHeight,
+            //     initValue: settings.breakpoint_labels[4]
+            // }
 
         ],
         label: {
@@ -452,15 +452,21 @@ function handle_sumbit(dialog, old_settings, context) {
 
         var current_layer_parent = current_layer.parentGroup();
         var fs = current_layer.fontSize(),
+                // lh = parseFloat(current_layer.lineHeight()),
+                // ts = parseFloat(dialog.model.get('type_scale', DEFAULT_SETTINGS.type_scale, {is_number: true})),
+                // ls = parseFloat(dialog.model.get('line_height', DEFAULT_SETTINGS.line_height, {is_number: true})),
+                // bs = parseFloat(dialog.model.get('breakpoint_scale', DEFAULT_SETTINGS.breakpoint_scale, {is_number: true})),
+                // ps = parseFloat(dialog.model.get('paragraph_spacing', DEFAULT_SETTINGS.paragraph_spacing, {is_number: true})),
                 lh = parseFloat(current_layer.lineHeight()),
-                ts = parseFloat(dialog.model.get('type_scale', DEFAULT_SETTINGS.type_scale, {is_number: true})),
-                ls = parseFloat(dialog.model.get('line_height', DEFAULT_SETTINGS.line_height, {is_number: true})),
-                bs = parseFloat(dialog.model.get('breakpoint_scale', DEFAULT_SETTINGS.breakpoint_scale, {is_number: true})),
-                ps = parseFloat(dialog.model.get('paragraph_spacing', DEFAULT_SETTINGS.paragraph_spacing, {is_number: true})),
+                ts = parseFloat(dialog.model.get('type_scale').replace(',', '.')),
+                ls = parseFloat(dialog.model.get('line_height'.replace(',', '.'))),
+                bs = parseFloat(dialog.model.get('breakpoint_scale').replace(',', '.')),
+                ps = parseFloat(dialog.model.get('paragraph_spacing').replace(',', '.')),
                 chosen_alignments = dialog.model.getArray('alignments'),
                 chosen_breakpoints = dialog.model.getArray('chosen_breakpoints'),
                 breakpoint_labels = dialog.model.getArray('breakpoint_labels', DEFAULT_SETTINGS.breakpoint_labels),
                 rounding = get_rounding(dialog.model.get('rounding')),
+                rounding_fs = get_rounding('Normal'),
                 naming_convention = dialog.model.get('naming_convention', DEFAULT_SETTINGS.naming_convention, {placeholder: Constants.NAMING_CONVENTION_PLACHOLDER_TEXT}),
                 y = current_layer.frame().y() + 25, // + start 25 pixels below the selected text layer
                 x = current_layer.frame().x();
@@ -478,6 +484,23 @@ function handle_sumbit(dialog, old_settings, context) {
             var current_fs = fs;
             if (chosen_breakpoints[breakpoint_label_i] == "1") {
                 HEADER_TAGS.forEach(function (header_tag) {
+                    console.log('header_tag')
+                    console.log(header_tag)
+                    switch (header_tag) {
+                        case 'XSMALL':
+                            current_fs = 12
+                            break;
+                        case 'SMALL':
+                            current_fs = 14
+                            break;
+                        case 'P':
+                            current_fs = fs
+                            break;
+                        
+                        default:
+                            current_fs = current_fs
+                            break;
+                    } 
                     y += (current_fs + lh);
                     lh = ls * current_fs;
                     ALIGNMENTS.forEach(function (alignment, alignment_i) {
@@ -489,7 +512,7 @@ function handle_sumbit(dialog, old_settings, context) {
                                 lh: rounding(lh),
                                 x: x,
                                 y: new_y,
-                                fs: rounding(current_fs),
+                                fs: rounding_fs(current_fs),
                                 ps: rounding(ps * lh),
                                 style_name: name,
                                 replace_text_with: name,

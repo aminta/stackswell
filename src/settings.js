@@ -6,10 +6,10 @@ export const DEFAULT_SETTINGS = {
     paragraph_spacing: "0",
     alignments: ["1", "1", "1"],
     breakpoint_scale: "1.25",
-    chosen_breakpoints: ["1", "1", "1", "1", "1"],
-    breakpoint_labels: ["XS", "SM", "MD", "LG", ".XL"],
+    chosen_breakpoints: ["1", "1"],
+    breakpoint_labels: ["SM", "LG"],
     naming_convention: "",
-    rounding: "Normal"
+    rounding: "Multiples of 8"
 };
 /*
 XS: 0-575
@@ -18,8 +18,9 @@ MD: 767 - 990
 LG: 991 - 1198
 XL: 1199+
  */
-export const DEFAULT_BREAKPOINTS = [575, 766, 990, 1198];
-export const HEADER_TAGS = ["P", "H6", "H5", "H4", "H3", "H2", "H1"];
+// export const DEFAULT_BREAKPOINTS = [575, 766, 990, 1198];
+export const DEFAULT_BREAKPOINTS = [575];
+export const HEADER_TAGS = ["XSMALL", "SMALL", "P", "H6", "H5", "H4", "H3", "H2", "H1"];
 export const ALIGNMENTS = ["Left", "Center", "Right"];
 export const LABEL_VARIANTS = [["XL", ".XL", "_XL"]];
 
