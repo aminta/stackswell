@@ -2,15 +2,17 @@ import Constants from "./constants";
 
 export const DEFAULT_SETTINGS = {
     type_scale: "1.25",
-    line_height: "1.333",
+    line_height: "1.325",
     paragraph_spacing: "0",
     alignments: ["1", "1", "1"],
-    breakpoint_scale: "1.25",
+    breakpoint_scale: "1.15",
     chosen_breakpoints: ["1", "1"],
     breakpoint_labels: ["LG", "SM"],
     naming_convention: "",
     naming_convention_prefix: "",
-    rounding: "Multiples of 8"
+    naming_convention_weight: "",
+    rounding_fs: "Normal",
+    rounding_lh: "Multiples of 8"
 };
 /*
 XS: 0-575s
@@ -76,7 +78,9 @@ export default class Settings {
             breakpoint_labels: dialog.model.getArray('breakpoint_labels', DEFAULT_SETTINGS.breakpoint_labels),
             naming_convention: dialog.model.get('naming_convention', DEFAULT_SETTINGS.naming_convention, {placeholder: Constants.NAMING_CONVENTION_PLACHOLDER_TEXT}),
             naming_convention_prefix: dialog.model.get('naming_convention_prefix', DEFAULT_SETTINGS.naming_convention_prefix, {placeholder: Constants.NAMING_CONVENTION_PREFIX_PLACHOLDER_TEXT}),
-            rounding: dialog.model.get('rounding'),
+            naming_convention_weight: dialog.model.get('naming_convention_weight', DEFAULT_SETTINGS.naming_convention_weight, {placeholder: Constants.NAMING_CONVENTION_WEIGHT_PLACHOLDER_TEXT}),
+            rounding_lh: dialog.model.get('rounding_lh'),
+            rounding_fs: dialog.model.get('rounding_fs'),
             text_color: String(text_color)
         };
         //console.log(`save() ${JSON.stringify(settings)}`, settings);

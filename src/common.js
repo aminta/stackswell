@@ -11,13 +11,14 @@ export function rename_text_styles(old_settings, new_settings, document_data) {
             ALIGNMENTS.forEach(alignment => {
                 const old_color = old_settings.naming_convention != "" ? old_settings.naming_convention : `#${old_settings.text_color !== undefined ? old_settings.text_color : new_settings.text_color}`;
                 const old_prefix = old_settings.naming_convention_prefix != "" ? old_settings.naming_convention_prefix : "";
+                const old_weight = old_settings.naming_convention_weight != "" ? old_settings.naming_convention_weight : "";
                 const old_style_name = `${old_prefix}/${old_breakpoint_label}/${header_tag}/${old_color}/${alignment}`;
                 const shared_style = shared_styles_by_name.get(old_style_name);
                 if (shared_style != null) {
                     const new_color = new_settings.naming_convention != "" ? new_settings.naming_convention : `#${new_settings.text_color}`;
                     const new_prefix =  new_settings.naming_convention_prefix != "" ? new_settings.naming_convention_prefix : "";
                     const new_breakpoint_label = new_settings.breakpoint_labels[index];
-                    const new_style_name = `${new_prefix}/${new_breakpoint_label}/${header_tag}/${new_color}/${alignment}`;
+                    const new_style_name = `${new_prefix}/${new_breakpoint_label}/${header_tag}/${new_color}/${old_weight}/${alignment}`;
                     shared_style.name = new_style_name;
                 }
             });

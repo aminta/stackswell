@@ -1,10 +1,19 @@
 # Stackswell - Edited version
 
-- fixed bug that avoided to enter new float values for scales; limited bp to 2; created by default a small and xsmall style; rounding of font-size is normal for all fonts, rounding for line-height is selectable and by default is set to "muliple of 8"
+- fixed bug that avoided to enter new float values for scales;
 
-- added "prefix" option to insert a prefix for the text style
+- limited breakpoints to 2 mainly used in all web projects
 
-- now the scale for the small bp is created for second: system large first
+- created by default a small and xsmall style of 12px and 14px for each style
+
+- separate options for rounding of font size and rounding of line height
+
+- added "prefix" option to insert a prefix for the text style (like "Title", "Main" etc)
+
+- added "weight" option to insert a weight for the text style (like "Regular", "Bold" etc)
+
+- now the scale for the small bp is created for second: system is large-first
+
 
 ## Stackswell - No Longer Updated
 

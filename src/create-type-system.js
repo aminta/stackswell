@@ -17,9 +17,9 @@ function create_dialog(settings) {
     const dialog = UI.build_dialog("Create Type System", "Generate System", "Cancel");
 
     // Creating the view
-    const viewHeight = 317;
+    const viewHeight = 520;
     const viewLineHeight = 25; // the height of each line in the modal
-    const label_width = 100;
+    const label_width = 150;
     const control_width = 200;
 
     // keep current line state
@@ -91,16 +91,16 @@ function create_dialog(settings) {
                 enabled: settings.alignments[0] == "1"
             },
             {
-                x: label_width + 50,
-                y: viewLine,
+                x: label_width,
+                y: viewSpacer.nextLine(),
                 width: 70,
                 height: viewLineHeight,
                 message: "Center",
                 enabled: settings.alignments[1] == "1"
             },
             {
-                x: label_width + 120,
-                y: viewLine,
+                x: label_width,
+                y: viewSpacer.nextLine(),
                 width: 50,
                 height: viewLineHeight,
                 message: "Right",
@@ -229,22 +229,6 @@ function create_dialog(settings) {
     };
 
     viewLine = viewSpacer.nextLine(67);
-    var naming_convention = {
-        x: label_width,
-        y: viewLine,
-        width: control_width,
-        height: viewLineHeight,
-        initValue: settings.naming_convention.length === 0 ? Constants.NAMING_CONVENTION_PLACHOLDER_TEXT : settings.naming_convention, // TODO make this a variable/search if changing
-        label: {
-            x: 0,
-            y: viewLine,
-            width: label_width,
-            height: viewLineHeight,
-            message: "Color Name"
-        }
-    };
-
-    viewLine = viewSpacer.nextLine();
     var naming_convention_prefix = {
         x: label_width,
         y: viewLine,
@@ -261,7 +245,40 @@ function create_dialog(settings) {
     };
 
     viewLine = viewSpacer.nextLine();
-    var rounding = {
+    var naming_convention = {
+        x: label_width,
+        y: viewLine,
+        width: control_width,
+        height: viewLineHeight,
+        initValue: settings.naming_convention.length === 0 ? Constants.NAMING_CONVENTION_PLACHOLDER_TEXT : settings.naming_convention, // TODO make this a variable/search if changing
+        label: {
+            x: 0,
+            y: viewLine,
+            width: label_width,
+            height: viewLineHeight,
+            message: "Color Name"
+        }
+    };
+
+    viewLine = viewSpacer.nextLine();
+    var naming_convention_weight = {
+        x: label_width,
+        y: viewLine,
+        width: control_width,
+        height: viewLineHeight,
+        initValue: settings.naming_convention_weight.length === 0 ? Constants.NAMING_CONVENTION_WEIGHT_PLACHOLDER_TEXT : settings.naming_convention.weight, // TODO make this a variable/search if changing
+        label: {
+            x: 0,
+            y: viewLine,
+            width: label_width,
+            height: viewLineHeight,
+            message: "Weight"
+        }
+    };
+
+   
+    viewLine = viewSpacer.nextLine();
+    var rounding_fs = {
         x: label_width,
         y: viewLine,
         width: control_width,
@@ -272,16 +289,41 @@ function create_dialog(settings) {
             'Multiples of 8',
             'None'
         ],
-        selected_option: settings.rounding,
+        selected_option: settings.rounding_fs,
         label: {
             x: 0,
             y: viewLine,
             width: label_width,
             height: viewLineHeight,
             fontSize: 12,
-            message: "Rounding"
+            message: "Rounding of Font size"
         }
     };
+
+    viewLine = viewSpacer.nextLine();
+    var rounding_lh = {
+        x: label_width,
+        y: viewLine,
+        width: control_width,
+        height: viewLineHeight,
+        options: [
+            'Normal',
+            'Multiples of 4',
+            'Multiples of 8',
+            'None'
+        ],
+        selected_option: settings.rounding_lh,
+        label: {
+            x: 0,
+            y: viewLine,
+            width: label_width,
+            height: viewLineHeight,
+            fontSize: 12,
+            message: "Rounding of Line Height"
+        }
+    };
+
+    
 
     const accessoryView = UI.build_accessory_view(300, viewHeight, dialog)
     var view_model = new ViewModel();
@@ -305,14 +347,23 @@ function create_dialog(settings) {
     breakpoints.textFields.forEach(text_field => view_model.addPropArray('breakpoint_labels', UI.createTextField(accessoryView, text_field)));
     UI.createLabel(accessoryView, breakpoints.label);
 
+    view_model.addProp('naming_convention_prefix', UI.createTextField(accessoryView, naming_convention_prefix));
+    UI.createLabel(accessoryView, naming_convention_prefix.label);
+
+
     view_model.addProp('naming_convention', UI.createTextField(accessoryView, naming_convention));
     UI.createLabel(accessoryView, naming_convention.label);
 
-    view_model.addProp('naming_convention_prefix', UI.createTextField(accessoryView, naming_convention_prefix));
-    UI.createLabel(accessoryView, naming_convention_prefix.label);
     
-    view_model.addProp('rounding', UI.createDropdown(accessoryView, rounding));
-    UI.createLabel(accessoryView, rounding.label);
+    view_model.addProp('naming_convention_weight', UI.createTextField(accessoryView, naming_convention_weight));
+    UI.createLabel(accessoryView, naming_convention_weight.label);
+
+    
+    view_model.addProp('rounding_fs', UI.createDropdown(accessoryView, rounding_fs));
+    UI.createLabel(accessoryView, rounding_fs.label);
+
+    view_model.addProp('rounding_lh', UI.createDropdown(accessoryView, rounding_lh));
+    UI.createLabel(accessoryView, rounding_lh.label);
 
     return {
         dialog: dialog,
@@ -417,7 +468,9 @@ function create_text_and_style(options) {
     var hexVal = options.naming_convention ? options.naming_convention : '#' + current_attributes.MSAttributedStringColorAttribute.hexValue();
 
     var prefix = options.naming_convention_prefix;
-    const style_name = options.style_name.replace('COLOR', hexVal).replace('PREFIX', prefix);
+    var weight = options.naming_convention_weight;
+    const style_name = options.style_name.replace('COLOR', hexVal).replace('PREFIX', prefix).replace('WEIGHT', weight);
+
 
     let shared_style = context.document.documentData().layerTextStyles().sharedStyles().find(sharedStyle => {
         return sharedStyle.name() == style_name;
@@ -453,7 +506,8 @@ function handle_sumbit(dialog, old_settings, context) {
 
         console.log('Type Scale: ' + dialog.model.get('type_scale'));
         console.log('Line Height: ' + dialog.model.get('line_height'));
-        console.log('Rounding: ' + dialog.model.get('rounding'));
+        console.log('Rounding Lh: ' + dialog.model.get('rounding_lh'));
+        console.log('RoundingFs: ' + dialog.model.get('rounding_fs'));
         // console.log('Paragraph Spacing: '+ dialog.model.get('paragraph_spacing'));
         // console.log(dialog.model.getArray('chosen_breakpoints'));
         console.log(dialog.model.getArray('alignments'));
@@ -487,10 +541,11 @@ function handle_sumbit(dialog, old_settings, context) {
                 chosen_alignments = dialog.model.getArray('alignments'),
                 chosen_breakpoints = dialog.model.getArray('chosen_breakpoints'),
                 breakpoint_labels = dialog.model.getArray('breakpoint_labels', DEFAULT_SETTINGS.breakpoint_labels),
-                rounding = get_rounding(dialog.model.get('rounding')),
-                rounding_fs = get_rounding('Normal'),
-                naming_convention = dialog.model.get('naming_convention', DEFAULT_SETTINGS.naming_convention, {placeholder: Constants.NAMING_CONVENTION_PLACHOLDER_TEXT}),
+                rounding_lh = get_rounding(dialog.model.get('rounding_lh')),
+                rounding_fs = get_rounding(dialog.model.get('rounding_fs')),
                 naming_convention_prefix = dialog.model.get('naming_convention_prefix', DEFAULT_SETTINGS.naming_convention_prefix, {placeholder: Constants.NAMING_CONVENTION_PREFIX_PLACHOLDER_TEXT}),      
+                naming_convention = dialog.model.get('naming_convention', DEFAULT_SETTINGS.naming_convention, {placeholder: Constants.NAMING_CONVENTION_PLACHOLDER_TEXT}),
+                naming_convention_weight = dialog.model.get('naming_convention_weight', DEFAULT_SETTINGS.naming_convention_weight, {placeholder: Constants.NAMING_CONVENTION_WEIGHT_PLACHOLDER_TEXT}),    
                 y = current_layer.frame().y() + 25, // + start 25 pixels below the selected text layer
                 x = current_layer.frame().x();
 
@@ -527,22 +582,23 @@ function handle_sumbit(dialog, old_settings, context) {
                     y += (current_fs + lh);
                     lh = ls * current_fs;
                     ALIGNMENTS.forEach(function (alignment, alignment_i) {
-                        var name = `PREFIX/${breakpoint_label}/${header_tag}/COLOR/${alignment}`;
+                        var name = `PREFIX/${breakpoint_label}/${header_tag}/COLOR/WEIGHT/${alignment}`;
                         if (chosen_alignments[alignment_i] == "1") {
                             var new_y = y;
                             var new_layer = create_text_and_style({
                                 current_layer: current_layer,
-                                lh: rounding(lh),
+                                lh: rounding_lh(lh),
                                 x: x,
                                 y: new_y,
                                 fs: rounding_fs(current_fs),
-                                ps: rounding(ps * lh),
+                                ps: rounding_fs(ps * lh),
                                 style_name: name,
                                 replace_text_with: name,
                                 alignment_i: alignment_is[alignment_i],
                                 alignment: alignment.toLowerCase(),
                                 naming_convention: naming_convention == "" ? false : naming_convention,
-                                naming_convention_prefix: naming_convention_prefix == "" ? false : naming_convention_prefix
+                                naming_convention_prefix: naming_convention_prefix == "" ? false : naming_convention_prefix,
+                                naming_convention_weight: naming_convention_weight == "" ? false : naming_convention_weight
                             });
 
 
