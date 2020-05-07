@@ -554,7 +554,9 @@ function handle_sumbit(dialog, old_settings, context) {
                     current_fs *= ts;
                 });
                 y += breakpoint_group_spacing;
-                fs *= bs;
+                // fs *= bs;
+                // now the scale for the small bp is created for second: system large first
+                fs = fs / bs;
             } else {
                 console.log(`${breakpoint_label} not chosen`);
             }

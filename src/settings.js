@@ -7,13 +7,13 @@ export const DEFAULT_SETTINGS = {
     alignments: ["1", "1", "1"],
     breakpoint_scale: "1.25",
     chosen_breakpoints: ["1", "1"],
-    breakpoint_labels: ["SM", "LG"],
+    breakpoint_labels: ["LG", "SM"],
     naming_convention: "",
     naming_convention_prefix: "",
     rounding: "Multiples of 8"
 };
 /*
-XS: 0-575
+XS: 0-575s
 SM: 576-766
 MD: 767 - 990
 LG: 991 - 1198
