@@ -1,0 +1,21 @@
+# npm
+node_modules
+.npm
+npm-debug.log
+
+# mac
+.DS_Store
+
+# WebStorm
+.idea
+
+# personal
+src/notes
+
+# src maps
+*.map
+
+*.sketchplugin
+
+build
+*.local.json
