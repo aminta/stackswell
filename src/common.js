@@ -10,7 +10,7 @@ export function rename_text_styles(old_settings, new_settings, document_data) {
         HEADER_TAGS.forEach(header_tag => {
             ALIGNMENTS.forEach(alignment => {
                 const old_color = old_settings.naming_convention != "" ? old_settings.naming_convention : `#${old_settings.text_color !== undefined ? old_settings.text_color : new_settings.text_color}`;
-                const old_prefix = old_settings.naming_convention_prefix != "" ? naming_convention_prefix : "";
+                const old_prefix = old_settings.naming_convention_prefix != "" ? old_settings.naming_convention_prefix : "";
                 const old_style_name = `${old_prefix}/${old_breakpoint_label}/${header_tag}/${old_color}/${alignment}`;
                 const shared_style = shared_styles_by_name.get(old_style_name);
                 if (shared_style != null) {
