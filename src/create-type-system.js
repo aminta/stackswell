@@ -245,6 +245,22 @@ function create_dialog(settings) {
     };
 
     viewLine = viewSpacer.nextLine();
+    var naming_convention_prefix = {
+        x: label_width,
+        y: viewLine,
+        width: control_width,
+        height: viewLineHeight,
+        initValue: settings.naming_convention_prefix.length === 0 ? Constants.NAMING_CONVENTION_PREFIX_PLACHOLDER_TEXT : settings.naming_convention_prefix, // TODO make this a variable/search if changing
+        label: {
+            x: 0,
+            y: viewLine,
+            width: label_width,
+            height: viewLineHeight,
+            message: "Prefix"
+        }
+    };
+
+    viewLine = viewSpacer.nextLine();
     var rounding = {
         x: label_width,
         y: viewLine,
@@ -292,6 +308,9 @@ function create_dialog(settings) {
     view_model.addProp('naming_convention', UI.createTextField(accessoryView, naming_convention));
     UI.createLabel(accessoryView, naming_convention.label);
 
+    view_model.addProp('naming_convention_prefix', UI.createTextField(accessoryView, naming_convention_prefix));
+    UI.createLabel(accessoryView, naming_convention_prefix.label);
+    
     view_model.addProp('rounding', UI.createDropdown(accessoryView, rounding));
     UI.createLabel(accessoryView, rounding.label);
 
@@ -396,7 +415,10 @@ function create_text_and_style(options) {
 
     // add the style to shared style
     var hexVal = options.naming_convention ? options.naming_convention : '#' + current_attributes.MSAttributedStringColorAttribute.hexValue();
-    const style_name = options.style_name.replace('COLOR', hexVal);
+
+    var prefix = options.naming_convention_prefix;
+    const style_name = options.style_name.replace('COLOR', hexVal).replace('PREFIX', prefix);
+
     let shared_style = context.document.documentData().layerTextStyles().sharedStyles().find(sharedStyle => {
         return sharedStyle.name() == style_name;
     });
@@ -468,6 +490,7 @@ function handle_sumbit(dialog, old_settings, context) {
                 rounding = get_rounding(dialog.model.get('rounding')),
                 rounding_fs = get_rounding('Normal'),
                 naming_convention = dialog.model.get('naming_convention', DEFAULT_SETTINGS.naming_convention, {placeholder: Constants.NAMING_CONVENTION_PLACHOLDER_TEXT}),
+                naming_convention_prefix = dialog.model.get('naming_convention_prefix', DEFAULT_SETTINGS.naming_convention_prefix, {placeholder: Constants.NAMING_CONVENTION_PREFIX_PLACHOLDER_TEXT}),      
                 y = current_layer.frame().y() + 25, // + start 25 pixels below the selected text layer
                 x = current_layer.frame().x();
 
@@ -504,7 +527,7 @@ function handle_sumbit(dialog, old_settings, context) {
                     y += (current_fs + lh);
                     lh = ls * current_fs;
                     ALIGNMENTS.forEach(function (alignment, alignment_i) {
-                        var name = `${breakpoint_label}/${header_tag}/COLOR/${alignment}`;
+                        var name = `PREFIX/${breakpoint_label}/${header_tag}/COLOR/${alignment}`;
                         if (chosen_alignments[alignment_i] == "1") {
                             var new_y = y;
                             var new_layer = create_text_and_style({
@@ -518,7 +541,8 @@ function handle_sumbit(dialog, old_settings, context) {
                                 replace_text_with: name,
                                 alignment_i: alignment_is[alignment_i],
                                 alignment: alignment.toLowerCase(),
-                                naming_convention: naming_convention == "" ? false : naming_convention
+                                naming_convention: naming_convention == "" ? false : naming_convention,
+                                naming_convention_prefix: naming_convention_prefix == "" ? false : naming_convention_prefix
                             });
 
 

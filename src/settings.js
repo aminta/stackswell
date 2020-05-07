@@ -9,6 +9,7 @@ export const DEFAULT_SETTINGS = {
     chosen_breakpoints: ["1", "1"],
     breakpoint_labels: ["SM", "LG"],
     naming_convention: "",
+    naming_convention_prefix: "",
     rounding: "Multiples of 8"
 };
 /*
@@ -74,6 +75,7 @@ export default class Settings {
             chosen_breakpoints: dialog.model.getArray('chosen_breakpoints'),
             breakpoint_labels: dialog.model.getArray('breakpoint_labels', DEFAULT_SETTINGS.breakpoint_labels),
             naming_convention: dialog.model.get('naming_convention', DEFAULT_SETTINGS.naming_convention, {placeholder: Constants.NAMING_CONVENTION_PLACHOLDER_TEXT}),
+            naming_convention_prefix: dialog.model.get('naming_convention_prefix', DEFAULT_SETTINGS.naming_convention_prefix, {placeholder: Constants.NAMING_CONVENTION_PREFIX_PLACHOLDER_TEXT}),
             rounding: dialog.model.get('rounding'),
             text_color: String(text_color)
         };
