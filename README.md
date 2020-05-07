@@ -1,4 +1,4 @@
-# Stackswell - Edited versione
+# Stackswell - Edited version
 
 - fixed bug that avoided to enter new float values for scales; limited bp to 2; created by default a small and xsmall style; rounding of font-size is normal for all fonts, rounding for line-height is selectable and by default is set to "muliple of 8"
 
