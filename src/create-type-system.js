@@ -266,7 +266,7 @@ function create_dialog(settings) {
         y: viewLine,
         width: control_width,
         height: viewLineHeight,
-        initValue: settings.naming_convention_weight.length === 0 ? Constants.NAMING_CONVENTION_WEIGHT_PLACHOLDER_TEXT : settings.naming_convention.weight, // TODO make this a variable/search if changing
+        initValue: settings.naming_convention_weight.length === 0 ? Constants.NAMING_CONVENTION_WEIGHT_PLACHOLDER_TEXT : settings.naming_convention_weight, // TODO make this a variable/search if changing
         label: {
             x: 0,
             y: viewLine,
@@ -469,8 +469,14 @@ function create_text_and_style(options) {
 
     var prefix = options.naming_convention_prefix;
     var weight = options.naming_convention_weight;
+
+    console.log('style name before')
+    console.log(options.style_name)
+
     const style_name = options.style_name.replace('COLOR', hexVal).replace('PREFIX', prefix).replace('WEIGHT', weight);
 
+    console.log('style name after')
+    console.log(style_name)
 
     let shared_style = context.document.documentData().layerTextStyles().sharedStyles().find(sharedStyle => {
         return sharedStyle.name() == style_name;
@@ -583,6 +589,8 @@ function handle_sumbit(dialog, old_settings, context) {
                     lh = ls * current_fs;
                     ALIGNMENTS.forEach(function (alignment, alignment_i) {
                         var name = `PREFIX/${breakpoint_label}/${header_tag}/COLOR/WEIGHT/${alignment}`;
+                        console.log('style name')
+                        console.log(name)
                         if (chosen_alignments[alignment_i] == "1") {
                             var new_y = y;
                             var new_layer = create_text_and_style({
